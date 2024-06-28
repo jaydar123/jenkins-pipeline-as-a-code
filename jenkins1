@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+    environment {
+        name = 'Jay'
+    }
+    parameters {
+        string(name: 'person', defaultValue: 'Abhinav', description: "who are you?")
+        booleanParam(name: 'City', defaultValue: 'Delhi', description: "")
+    }
+
+    stages {
+        stage('Test') {
+            steps {
+                sh '''
+                ls
+                pwd
+                '''
+            }
+        }
+        stage('Environment Variable') {
+            steps {
+                sh 'echo "${BUILD_ID}"'
+                sh 'echo "${name}"'
+            }
+        }
+        stage('Continue') {
+            
+            input{
+                message "Should we continue?"
+                ok "yes we should"
+            }
+            steps {
+                sh 'echo "${person}"'
+                sh 'echo "${City}"'
+            }
+        }
+        stage('Deploy to prod') {
+            steps {
+                echo 'Deploy to prod'
+            }
+        }
+    }
+}
